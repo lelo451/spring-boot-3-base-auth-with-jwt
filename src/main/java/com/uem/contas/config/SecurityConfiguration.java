@@ -26,6 +26,30 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
+    private static final String[] AUTH_WHITELIST = {
+            "/v2/api-docs",
+            "v2/api-docs",
+            "/swagger-resources",
+            "swagger-resources",
+            "/swagger-resources/**",
+            "swagger-resources/**",
+            "/configuration/ui",
+            "configuration/ui",
+            "/configuration/security",
+            "configuration/security",
+            "/swagger-ui.html",
+            "swagger-ui.html",
+            "webjars/**",
+            // -- Swagger UI v3
+            "/v3/api-docs/**",
+            "v3/api-docs/**",
+            "/swagger-ui/**",
+            "swagger-ui/**",
+            // -- API
+            "/api/v1/categories/**",
+            "/api/v1/auth/**"
+    };
+
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final UserService userService;
     private final LogoutHandler logoutHandler;
@@ -35,7 +59,7 @@ public class SecurityConfiguration {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req -> req
-                        .requestMatchers("/api/v1/auth/**")
+                        .requestMatchers(AUTH_WHITELIST)
                         .permitAll()
                         .anyRequest()
                         .authenticated()
